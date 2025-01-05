@@ -44,15 +44,18 @@ class Lidar():
         for line in self.lasers:
             updated = False
             for object in obstacles:
+                # If the line has been updated atleast once first check wether the new rect to collide with is within the new range of the newly created line
                 if updated == True:
-                    if math.dist(car_position,object.center)> math.dist(car_position, new_line[0]):
+                    if math.dist(car_position,object.center)> new_line_dist:
                         continue
+                
                 # Save the result in endpoint
                 end_point = self.collide_detect(line, object,car_position)
             
                 # If there is a collision update the line to the new line
                 if end_point != None:
                     new_line = (end_point, line[1])
+                    new_line_dist = math.dist(car_position, new_line[0])
                     updated = True
             # Change the previouos line with the current one.
             if updated:

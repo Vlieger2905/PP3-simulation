@@ -13,7 +13,7 @@ class Simulation:
         self.clock =  pygame.time.Clock()
         self.agents = []
         # temp to test car
-        for i in range(10):
+        for i in range(100):
             self.agents.append(Car.Car(self.start_position))
         # Map to train the cars on
         self.map = Map.Map()
@@ -35,18 +35,15 @@ class Simulation:
             if keys[pygame.K_d]:
                 self.agents[0].update_car_rotation(20)
 
-            # # temp to draw agents
-            # for agent in self.agents:
-            #     agent.update(self.screen, self.map.rects)
-            # Assuming self.agents is a list of agent objects
-            with ProcessPoolExecutor() as executor:
-                executor.map(self.update_agents, self.agents)
+            self.update_agents(self.agents)
 
             for agent in self.agents:
                 agent.draw(self.screen)
+                agent.lidar.draw_lines(self.screen, agent.position)
             # Updating the screen
             i += 1
-            if i == 100:
+            print(self.clock.get_fps())
+            if i == 10000:
                 quit()
             pygame.display.update()
             self.clock.tick()

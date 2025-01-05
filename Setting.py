@@ -15,7 +15,7 @@ car_max_right = 15 # in degrees
 starting_angle = 0 # in degrees
 
 # Information lidar
-laser_lines = 360 #amount of sensor lines per rotation assuming 1 hz
+laser_lines = 360/8 #amount of sensor lines per rotation assuming 1 hz
 lidar_min_dist = 20
 lidar_max_dist = 1200
 

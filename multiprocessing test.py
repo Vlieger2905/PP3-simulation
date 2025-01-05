@@ -1,30 +1,60 @@
-import multiprocessing
-import time
+import pygame
+import random
+import sys
+from concurrent.futures import ThreadPoolExecutor
 
-def process_chunk(chunk):
-    # Simulate some processing by squaring the numbers in the chunk
-    return [n * n for n in chunk]
+# Initialize Pygame
+pygame.init()
+
+# Screen dimensions
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Random Circles")
+
+# Colors
+BLACK = (0, 0, 0)
+
+def draw_circle():
+    # Random circle properties
+    radius = random.randint(10, 100)
+    x = random.randint(radius, WIDTH - radius)
+    y = random.randint(radius, HEIGHT - radius)
+    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+    # Draw the circle
+    pygame.draw.circle(screen, color, (x, y), radius)
+
+def draw_random_circles():
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(draw_circle) for _ in range(10000000)]
+        # Wait for all circles to be drawn
+        for future in futures:
+            future.result()
 
 def main():
-    numbers = list(range(1, 1000000001))  # A list of 1,000 numbers
-    chunk_size = 100  # Size of each chunk
-    num_chunks = len(numbers) // chunk_size  # Number of chunks
+    running = True
+    clock = pygame.time.Clock()
 
-    # Create a pool of workers
-    with multiprocessing.Pool(processes=4) as pool:
-        results = []
-        for i in range(num_chunks):
-            chunk = numbers[i * chunk_size:(i + 1) * chunk_size]
-            result = pool.apply_async(process_chunk, (chunk,))
-            results.append(result)
+    while running:
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-        # Collect the results
-        squared_numbers = []
-        for result in results:
-            squared_numbers.extend(result.get())
+        # Fill the screen with black
+        screen.fill(BLACK)
 
-    print(f"Original numbers: {numbers[:10]} ... {numbers[-10:]}")  # Show a slice for brevity
-    print(f"Squared numbers: {squared_numbers[:10]} ... {squared_numbers[-10:]}")  # Show a slice for brevity
+        # Draw random circles in parallel
+        draw_random_circles()
+
+        # Update the display
+        pygame.display.flip()
+
+        # Limit the frame rate
+        clock.tick(60)
+
+    pygame.quit()
+    sys.exit()
 
 if __name__ == "__main__":
     main()
