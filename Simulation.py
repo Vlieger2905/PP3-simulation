@@ -2,7 +2,7 @@ import pygame
 import sys
 import numpy as np
 import Setting, Car, Map
-from concurrent.futures import ProcessPoolExecutor
+import multiprocessing
 
 class Simulation:
     def __init__(self):
@@ -13,7 +13,7 @@ class Simulation:
         self.clock =  pygame.time.Clock()
         self.agents = []
         # temp to test car
-        for i in range(100):
+        for i in range(400):
             self.agents.append(Car.Car(self.start_position))
         # Map to train the cars on
         self.map = Map.Map()

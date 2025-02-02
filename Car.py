@@ -77,8 +77,6 @@ class Car():
         self.lidar.lasers = self.lidar.create_line(self.position,self.direction)
         # 
         self.lidar.obstacle_detection(obstacles, self.position)
-        # drawing the lasers of the lidar
-        # self.lidar.draw_lines(surface,self.position)
         # calculate the decision of the agent
 
         # execute the decision of the agent(rotate left, rotate right, brake, accelerate)

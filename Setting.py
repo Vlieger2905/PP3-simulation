@@ -25,5 +25,3 @@ y_start_pos = 50
 
 # Map settings
 grid_size = 10
-
-
