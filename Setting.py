@@ -10,8 +10,7 @@ HEIGTH = 720
 car_width = 0.185 # in m
 car_length = 0.361 # in m
 car_wheelbase = 0.257 # in m
-car_max_left = 15 # in degrees
-car_max_right = 15 # in degrees
+max_steering_angle = 30 # in degrees
 starting_angle = 0 # in degrees
 
 # Information lidar

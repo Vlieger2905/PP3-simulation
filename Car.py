@@ -1,27 +1,38 @@
 import pygame
-import math
+import math, random
 import numpy as np
 import Setting
 import Lidar
-
+from Neural.Brain import Brain
+#Casper was here
 class Car():
-    def __init__(self,spawn):
+    def __init__(self,spawn, lidar_amount):
         # Variables for pygame aspects
         self.spawn = spawn
         # Location of the car is the center of the car.
         self.position = spawn
-        self.direction = pygame.Vector2(1,1)
-        self.speed = 1
+        angle = random.uniform(0, 2 * math.pi)
+        self.direction = pygame.Vector2(math.cos(angle), math.sin(angle))
+        self.speed = 18
         self.rotation = self.direction
         # Lidar of the car
-        self.lidar = Lidar.Lidar(self.position,self.direction)
+        # Distance from lidar to obstacle
+        self.lidar = []
+        # Endpoints of the lines
+        self.lidar_endpoints = []
+
+
+        # Decision of the agent of where to go
+        self.decision = "left"
+        # Brain of the agent
+        self.brain = Brain(lidar_amount)
 
     
     # Function to draw a rect where the position is the center of the car.
     def draw(self, surface):
-        corners = self.rectangle_corners(self.position, Setting.car_width * 100, Setting.car_length * 100, (self.direction.x,self.direction.y))
+        self.corners = self.rectangle_corners(self.position, Setting.car_width * 100, Setting.car_length * 100, (self.direction.x,self.direction.y))
         # Testing to draw a polygon instead of cars.
-        pygame.draw.polygon(surface,(0,0,255),corners)
+        pygame.draw.polygon(surface,(0,0,255),self.corners)
 
     # Function to move the car
     def move(self):
@@ -66,17 +77,16 @@ class Car():
         
         return corners
 
+    # Function to check whether the car is colliding with the wall
+    def check_collision(self, walls):
+        for wall in walls:
+            distance = math.dist(wall.center, self.position)
+            if distance < int(Setting.car_length * 10):
+                for corner in self.corners:
+                    if wall.collidepoint(corner):
+                        return True
+        return False
 
-    # Function to update the car each frame
-    def update(self, obstacles):
-        # move the car
-        self.move()
-        # check collision
 
-        # lidar scan if certain amount of time has passed
-        self.lidar.lasers = self.lidar.create_line(self.position,self.direction)
-        # 
-        self.lidar.obstacle_detection(obstacles, self.position)
-        # calculate the decision of the agent
-
-        # execute the decision of the agent(rotate left, rotate right, brake, accelerate)
+    def thinking(self, input):
+        self.decision = self.brain.thinking(input)

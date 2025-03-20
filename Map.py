@@ -10,7 +10,6 @@ class Map:
         # self.grid = np.random.randint(2, size=(int(Setting.WIDTH / Setting.grid_size), int(Setting.HEIGTH / Setting.grid_size)))
         self.grid = pandas.read_csv("oval_circuit_matrix.csv")
         self.grid = self.grid.to_numpy()
-        self.grid = self.grid.swapaxes(0,1)
         self.rects = self.create_rect()
 
     # Creating the rects to collide the lasers and cars with 

@@ -2,8 +2,7 @@ import math
 import numpy as np
 import pygame
 import Setting
-
-
+#Casper was here
 # Class to define simulate the lidar scanner in the simulation
 class Lidar():
     def __init__(self,position,direction):

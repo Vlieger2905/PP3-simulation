@@ -4,13 +4,13 @@ import sys
 import numpy as np
 import math, time
 import Setting
-import multiprocessing, cProfile
+import multiprocessing
 # Initialize pygame
 pygame.init()
-
-def create_lines(position, direction):
+#Casper was not here, but Wouter was.
+def create_lines(position, direction, amount_of_lines):
         sensory_lines = []
-        sensor_lines = 32
+        sensor_lines = amount_of_lines
         # Normalize the direction vector
         magnitude = np.sqrt(direction[0]**2 + direction[1]**2)
         unit_vector = (direction[0] / magnitude, direction[1] / magnitude)
@@ -31,6 +31,7 @@ def create_lines(position, direction):
 
 def collide_lines(id, position, lines, rects):
     index = 0
+    distance = []
     for line in lines:
         updated = False
         for object in rects:
@@ -50,8 +51,9 @@ def collide_lines(id, position, lines, rects):
         # Change the previouos line with the current one.
         if updated:
             lines[index] = new_line
+        distance.append(math.dist(position, lines[index][0]))
         index += 1
-    return (id, position, lines)
+    return (id, lines, distance)
          
 def create_rects(Max_rexts):
     x_min, x_max = 0,1000
@@ -78,9 +80,14 @@ def collide_detect(line, obstacle, car_positioin):
 def collide_lines_wrapper(args):
     return collide_lines(*args)
 
-def multiprocess_lines(agents, rects, processes):
+# def multiprocess_lines(agents, rects, processes):
+#     pool = multiprocessing.Pool(processes=processes)
+#     arguments = [(id, agent[0],agent[1], rects) for  id, agent in enumerate(agents)]
+#     results = pool.map(collide_lines_wrapper, arguments)
+#     return results
+
+def multiprocess_lines(arguments, processes):
     pool = multiprocessing.Pool(processes=processes)
-    arguments = [(id, agent[0],agent[1], rects) for  id, agent in enumerate(agents)]
     results = pool.map(collide_lines_wrapper, arguments)
     return results
 
