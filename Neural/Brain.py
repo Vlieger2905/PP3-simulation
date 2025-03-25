@@ -16,7 +16,7 @@ class Brain:
         # Options to controll the car
         self.output_options= ["full_left", "left", "center", "right", "full_right"]
         self.outputSize = len(self.output_options)
-        self.neuronLayer =[self.inputSize,8,8,self.outputSize]
+        self.neuronLayer =[self.inputSize,32,64,32,self.outputSize]
         # Creating the hidden layers:
         for i in range(0,len(self.neuronLayer)-1):
             self.layers.append(Layer(self.neuronLayer[i],self.neuronLayer[i+1]))

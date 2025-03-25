@@ -1,40 +1,34 @@
-class Queue():
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from scipy.interpolate import griddata
 
-    def __init__(self):
-        self.s1 = LibraryStack()
-        self.s2 = LibraryStack()
+def plot_3d_surface(data):
+    # Unpack the data
+    agents_core, agents_cutoff, total_time = zip(*data)
 
-    """
-    Returns whether the queue is empty.
-    @return true if there are no elements left, false otherwise.
-    """
-    def isEmpty(self):
-        return self.s1.length()== 0
+    # Create a grid of unique x and y values
+    x_range = np.linspace(min(agents_core), max(agents_core), 50)
+    y_range = np.linspace(min(agents_cutoff), max(agents_cutoff), 50)
+    X, Y = np.meshgrid(x_range, y_range)
 
-    """
-    Returns the number of elements in the queue.
-    @return the number of elements in the queue.
-    """
-    def size(self):
-        return self.s1.length()
+    # Interpolate time values onto the grid
+    Z = griddata((agents_core, agents_cutoff), total_time, (X, Y), method='cubic')
 
-    """
-    Adds an element to the queue.
-    @param i element to enqueue.
-    """
-    def enqueue(self,i):
-        self.s1.append(i)
+    # Plot
+    fig = plt.figure(figsize=(10, 7))
+    ax = fig.add_subplot(111, projection='3d')
 
-    """
-    Removes the first element from the queue.
-    @return the first element from the queue.
-    """
-    def dequeue(self):
-        self.s1.pop()
+    # Surface plot
+    surf = ax.plot_surface(X, Y, Z, cmap='viridis', edgecolor='none')
 
-    """
-    Returns the first element from the queue without removing it.
-    @return the first element from the queue.
-    """
-    def first(self):
-        return self.s1[0]
+    # Labels
+    ax.set_xlabel("Agents per Core")
+    ax.set_ylabel("Agents Multi Cutoff")
+    ax.set_zlabel("Total Time")  # Now on the vertical axis
+    ax.set_title("3D Surface Plot of Time vs Agents")
+
+    # Color bar
+    fig.colorbar(surf, ax=ax, shrink=0.5, aspect=10, label="Total Time")
+
+    plt.show()

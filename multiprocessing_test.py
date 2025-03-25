@@ -66,9 +66,9 @@ def create_rects(Max_rexts):
         rects.append(pygame.Rect(x_pos,y_pos, rect_size, rect_size))
     return rects
 
-def collide_detect(line, obstacle, car_positioin):
+def collide_detect(line, obstacle, car_position):
         # Use clipline to check for collision
-        clipped_line = obstacle.clipline(car_positioin, line[0])
+        clipped_line = obstacle.clipline(car_position, line[0])
 
         if clipped_line:
             # If clipped_line is not an empty tuple, then the line collides/overlaps with the rect
@@ -80,12 +80,7 @@ def collide_detect(line, obstacle, car_positioin):
 def collide_lines_wrapper(args):
     return collide_lines(*args)
 
-# def multiprocess_lines(agents, rects, processes):
-#     pool = multiprocessing.Pool(processes=processes)
-#     arguments = [(id, agent[0],agent[1], rects) for  id, agent in enumerate(agents)]
-#     results = pool.map(collide_lines_wrapper, arguments)
-#     return results
-
+# function to execute the multiprocessing
 def multiprocess_lines(arguments, processes):
     pool = multiprocessing.Pool(processes=processes)
     results = pool.map(collide_lines_wrapper, arguments)

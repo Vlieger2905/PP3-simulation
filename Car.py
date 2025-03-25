@@ -6,13 +6,13 @@ import Lidar
 from Neural.Brain import Brain
 #Casper was here
 class Car():
-    def __init__(self,spawn, lidar_amount):
+    def __init__(self,spawn, lidar_amount, direction):
         # Variables for pygame aspects
         self.spawn = spawn
+        self.colour = (0,0,255)
         # Location of the car is the center of the car.
         self.position = spawn
-        angle = random.uniform(0, 2 * math.pi)
-        self.direction = pygame.Vector2(math.cos(angle), math.sin(angle))
+        self.direction = pygame.Vector2(direction)
         self.speed = 18
         self.rotation = self.direction
         # Lidar of the car
@@ -21,18 +21,22 @@ class Car():
         # Endpoints of the lines
         self.lidar_endpoints = []
 
-
         # Decision of the agent of where to go
         self.decision = "left"
         # Brain of the agent
         self.brain = Brain(lidar_amount)
+        # Fitness of the agent. Total rewards gained
+        self.fitness = 0
 
-    
-    # Function to draw a rect where the position is the center of the car.
-    def draw(self, surface):
+
+        # Corners of the car and outline of the car
         self.corners = self.rectangle_corners(self.position, Setting.car_width * 100, Setting.car_length * 100, (self.direction.x,self.direction.y))
-        # Testing to draw a polygon instead of cars.
-        pygame.draw.polygon(surface,(0,0,255),self.corners)
+        self.outline = self.create_outline()
+
+    # Function to draw the car
+    def draw(self, surface, colour):
+        # drawing the polygon of the car
+        pygame.draw.polygon(surface,colour,self.corners)
 
     # Function to move the car
     def move(self):
@@ -76,17 +80,28 @@ class Car():
         ]
         
         return corners
+    
+    # Create a list of lines that represent the outline of the car based on the corners of the car
+    def create_outline(self):
+        outline = []
+        outline.append((self.corners[0], self.corners[1]))
+        outline.append((self.corners[1], self.corners[2]))
+        outline.append((self.corners[2], self.corners[3]))
+        outline.append((self.corners[3], self.corners[0]))
+        return outline
+            
+
+    def update_car_outline(self):
+        self.corners = self.rectangle_corners(self.position, Setting.car_width * 100, Setting.car_length * 100, (self.direction.x,self.direction.y))
+        self.outline = self.create_outline()
 
     # Function to check whether the car is colliding with the wall
     def check_collision(self, walls):
         for wall in walls:
-            distance = math.dist(wall.center, self.position)
-            if distance < int(Setting.car_length * 10):
-                for corner in self.corners:
-                    if wall.collidepoint(corner):
-                        return True
+            for line in self.outline:
+                if wall.clipline(line):
+                    return True
         return False
-
 
     def thinking(self, input):
         self.decision = self.brain.thinking(input)
