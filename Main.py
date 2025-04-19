@@ -13,3 +13,5 @@ def main(amount_of_agents, max_cores, simulation_length, agents_core, agents_cut
 if __name__ == '__main__':
     main(S.amount_of_agents, S.max_cores, S.simulation_length, S.agents_per_core, S.agents_multi_cutoff)
     
+
+    

@@ -31,6 +31,7 @@ def procreation(agents, amount_of_children = S.amount_of_agents):
         child = agent
         child.direction = pygame.math.Vector2(S.start_direction)
         child.position = S.start_position
+        child.fitness = 0
         children.append(child)
 
     # creating the children that are the offspring of the best agents.

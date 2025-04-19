@@ -6,8 +6,9 @@ import Setting
 
 class Map:
     def __init__(self):
-        self.grid = pandas.read_csv("oval_circuit_matrix.csv")
+        self.grid = pandas.read_csv("Data Gathering/grid_output_10.csv")
         self.grid = self.grid.to_numpy()
+        print(self.grid.shape)
         self.grid = np.transpose(self.grid)
         self.rects = self.create_rect()
 
@@ -24,7 +25,9 @@ class Map:
             i += 1
             j = 0
         # Merge the rects to reduce the amount of rects to collide with 
+        print(f"1Created {len(collision_rects)} collision rects.")
         collision_rects = self.merge_rects(collision_rects)
+        print(f"2Created {len(collision_rects)} collision rects.")
         return collision_rects
     
     def merge_rects(self, rects):
@@ -65,6 +68,6 @@ class Map:
         return final_merged
 
     # drawing the map on the screen
-    def draw(self,surface,):
+    def draw(self,surface):
         for rect in self.rects:
             pygame.draw.rect(surface, (0,0,0),rect)

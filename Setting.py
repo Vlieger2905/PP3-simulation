@@ -18,6 +18,8 @@ lidar_min_dist = 20
 lidar_max_dist = 1200
 
 # Simulation settings
+# Map settings
+grid_size = 10
 # Amount of agents in the simulation
 amount_of_agents = 100
 # maximum Amount of cores to be used with multiprocessing
@@ -25,11 +27,11 @@ max_cores = 10
 # minumum amount of agents per core
 agents_per_core = 100
 # minimum amount of agents alive to use multiprocessing
-agents_multi_cutoff = 2000
+agents_multi_cutoff = 300
 # Amount of steps the simulation will run
-simulation_length =  1000
+simulation_length =  300
 # Starting position
-start_position = (640, 650)
+start_position = (200*grid_size, 37*grid_size)
 # Starting direction
 start_direction = (1, 0)
 # Amount of agents procreated in the following precentages
@@ -39,5 +41,4 @@ random_percentage = 0.1
 # Change for mutation to occur
 mutation_chance = 0.1
 
-# Map settings
-grid_size = 10
+

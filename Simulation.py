@@ -27,6 +27,7 @@ class Simulation:
 
     def Run(self, max_cores, agents_per_core, agents_multi_cutoff, simulation_length):
         steps = 0
+        generation = 0
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -64,10 +65,8 @@ class Simulation:
             for agent in self.died_agents:
                 agent.draw(self.screen, (255,0,0))
 
-            steps += 1
-            print("steps: ",steps)
             # If the simulation has run for the amount of steps or all agents are dead a new population gets made
-            if steps == simulation_length or self.agents.__len__() == 0:
+            if steps >= simulation_length or self.agents.__len__() == 0:
                 # Adding all the died agents to the agents list
                 self.agents.extend(self.died_agents)
                 # Creating a new population based on the previous population
@@ -75,6 +74,8 @@ class Simulation:
                 # Resetting the died agents and the steps
                 self.died_agents = []
                 steps = 0
+                generation += 1
+                print("Generation: ", generation)
 
             pygame.display.update()
             self.clock.tick()
@@ -120,5 +121,23 @@ class Simulation:
         # If the agent is still alive reward one point.
         agent.fitness += 1
 
+    def draw(self, surface):
 
+        # Find the agent with the highest fitness
+        if self.agents:
+            best_agent = max(self.agents, key=lambda agent: agent.fitness)
+            # Center the screen on the best agent
+            offset_x = S.WIDTH // 2 - best_agent.position[0]
+            offset_y = S.HEIGTH // 2 - best_agent.position[1]
+
+            # Draw all agents with the offset
+            for agent in self.agents:
+                agent.draw(surface, offset=(offset_x, offset_y))
+
+            # Highlight the best agent
+            best_agent.draw(surface, colour=(0, 255, 0), offset=(offset_x, offset_y))
+            self.map.draw(surface, offset=(offset_x, offset_y))
+        else:
+            # If no agents are alive, just draw the map
+            self.map.draw(surface)
 
