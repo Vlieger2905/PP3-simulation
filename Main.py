@@ -3,15 +3,12 @@ import Simulation
 import pygame
 import Setting as S
 
-def main(amount_of_agents, max_cores, simulation_length, agents_core, agents_cutoff):
+def main(Genes = None):
     pygame.init()
     pygame.display.set_caption('Race car simulation')
-    simulation = Simulation.Simulation(amount_of_agents, S.start_position, S.start_direction)
-    simulation.Run(max_cores, agents_core, agents_cutoff, simulation_length)
+    simulation = Simulation.Simulation(Genes)
+    simulation.Run()
 
 
 if __name__ == '__main__':
-    main(S.amount_of_agents, S.max_cores, S.simulation_length, S.agents_per_core, S.agents_multi_cutoff)
-    
-
-    
+    main("Save Files\Generation 350 at 02-05_16-41.json")

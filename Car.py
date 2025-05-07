@@ -6,13 +6,14 @@ import Lidar
 from Neural.Brain import Brain
 #Casper was here
 class Car():
-    def __init__(self,spawn, lidar_amount, direction):
+    def __init__(self,spawn, lidar_amount, direction, checkpoints, Genes = None):
         # Variables for pygame aspects
         self.spawn = spawn
-        self.colour = (0,0,255)
+        self.colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         # Location of the car is the center of the car.
-        self.position = spawn
-        self.direction = pygame.Vector2(direction)
+        self.position = (spawn[0] + random.randint(-2, 2), spawn[1] + random.randint(-2,2))
+        self.direction = pygame.Vector2(direction) + pygame.Vector2(random.uniform(-0.1, 0), random.uniform(-0.1, 0))
+        self.direction = self.direction.normalize()
         self.speed = 18
         self.rotation = self.direction
         # Lidar of the car
@@ -24,19 +25,33 @@ class Car():
         # Decision of the agent of where to go
         self.decision = "left"
         # Brain of the agent
-        self.brain = Brain(lidar_amount)
+        if Genes:
+            pass
+        else:
+            self.brain = Brain(lidar_amount)
         # Fitness of the agent. Total rewards gained
         self.fitness = 0
 
+        # Checkpoints that the agents has not yet hit
+        self.checkpoints = checkpoints
 
         # Corners of the car and outline of the car
         self.corners = self.rectangle_corners(self.position, Setting.car_width * 100, Setting.car_length * 100, (self.direction.x,self.direction.y))
         self.outline = self.create_outline()
 
+    # Function to draw the best car
+    def best_draw(self, surface, offset, colour):
+        # Apply the offset to the car's corners
+        offset_corners = [(x + offset[0], y + offset[1]) for x, y in self.corners]
+        # Draw the polygon of the car with the offset
+        pygame.draw.polygon(surface, colour, offset_corners)
+
     # Function to draw the car
-    def draw(self, surface, colour):
-        # drawing the polygon of the car
-        pygame.draw.polygon(surface,colour,self.corners)
+    def draw(self, surface, offset):
+        # Apply the offset to the car's corners
+        offset_corners = [(x + offset[0], y + offset[1]) for x, y in self.corners]
+        # Draw the polygon of the car with the offset
+        pygame.draw.polygon(surface, self.colour, offset_corners)
 
     # Function to move the car
     def move(self):
@@ -89,7 +104,6 @@ class Car():
         outline.append((self.corners[2], self.corners[3]))
         outline.append((self.corners[3], self.corners[0]))
         return outline
-            
 
     def update_car_outline(self):
         self.corners = self.rectangle_corners(self.position, Setting.car_width * 100, Setting.car_length * 100, (self.direction.x,self.direction.y))

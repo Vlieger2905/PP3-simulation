@@ -1,7 +1,6 @@
 import numpy as np
 import cupy as cp
-import random
-import pygame
+import random,json, pygame
 from operator import attrgetter
 import Car
 import Setting as S
@@ -12,54 +11,105 @@ import Setting as S
 # start_direction: tuple start direction
 # amount_of_agents: int amount of agents to create
 # sensory_lines: int amount of sensory lines
-def initial_population(start_position, start_direction, amount_of_agents = 100, sensory_lines = 32):
+def initial_population(map, Genes = None):
     agents = []
-    for i in range(amount_of_agents):
-        agents.append(Car.Car(start_position, sensory_lines, start_direction))
-    return agents
+    # If there is a genepool to intialize the population with
+    if Genes:
+        for i, gene in enumerate(Genes):
+            # Creating a instance of a car
+            agent = Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy())
+            # Changing the brain of the agent to the Genes values
+            for i in range(len(agent.brain.layers)):
+                # Inheriting the Layer Weights
+                for j in range(len(agent.brain.layers[i].weights)):
+                    for k in range(len(agent.brain.layers[i].weights[j])):
+                        agent.brain.layers[i].weights = cp.array(gene[i][0]['weights'].copy())
+                # Inheriting the Layer Biases
+                for j in range(len(agent.brain.layers[i].biases)):
+                    for k in range(len(agent.brain.layers[i].biases[j])):
+                        agent.brain.layers[i].biases = cp.array(gene[i][0]['biases'].copy())
+            
+            agents.append(agent)
+        return agents
+
+    # Create random agents based on no genes.
+    else:
+        for i in range(S.amount_of_agents):
+            agents.append(Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy()))
+        return agents
+    
 
 
-def procreation(agents, amount_of_children = S.amount_of_agents):
+def procreation(agents, map, amount_of_children = S.amount_of_agents):
     # Sort the agents by fitness
     agents = sorted(agents, key=attrgetter('fitness'), reverse=True)
-    # Get the top 10% of the agents
-    agents = agents[:int(len(agents) * S.copy_percentage)]
+
+    # Get the top % of the agents
+    agents = agents[:int(len(agents) * S.COPY_PERCENTAGE)]
+
     # Create the children 
     children = []
+
     # Creating the copys of the best performing agents in that generation
     for agent in agents:
-        child = agent
-        child.direction = pygame.math.Vector2(S.start_direction)
-        child.position = S.start_position
-        child.fitness = 0
+        child = Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy())
+        child.brain = agent.brain
         children.append(child)
 
     # creating the children that are the offspring of the best agents.
-    for i in range(int(amount_of_children * S.offspring_percentage)):
+    for i in range(int(amount_of_children * S.OFFSPRING_PERCENTAGE)):
         # Select two random parents
         parent1 = random.choice(agents)
         parent2 = random.choice(agents)
         # Create a child
-        child = Car.Car(parent1.spawn, S.laser_lines, S.start_direction)
+        child = Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy())
         # Crossover
         for i in range(len(child.brain.layers)):
+            # Inheriting the Layer Weights
             for j in range(len(child.brain.layers[i].weights)):
                 for k in range(len(child.brain.layers[i].weights[j])):
+                    # Parent 1 gene inheretance
                     if random.random() > 0.5:
-                        child.brain.layers[i].weights[j][k] = parent1.brain.layers[i].weights[j][k]
+                        # Random mutation happens
+                        if random.random() < S.mutation_chance:
+                            child.brain.layers[i].weights[j][k] = parent1.brain.layers[i].weights[j][k].copy() + random.uniform(-S.mutation_size, S.mutation_size)
+                        # No mutation happens
+                        else:
+                            child.brain.layers[i].weights[j][k] = parent1.brain.layers[i].weights[j][k].copy()
+                    # Parent 2 gene inheretance
                     else:
-                        child.brain.layers[i].weights[j][k] = parent2.brain.layers[i].weights[j][k]
-        # Mutation
-        if random.random() < S.mutation_chance:
-            for i in range(len(child.brain.layers)):
-                for j in range(len(child.brain.layers[i].weights)):
-                    for k in range(len(child.brain.layers[i].weights[j])):
-                        child.brain.layers[i].weights[j][k] += random.uniform(-0.1, 0.1)
+                        # Random mutation happens
+                        if random.random() < S.mutation_chance:
+                            child.brain.layers[i].weights[j][k] = parent2.brain.layers[i].weights[j][k].copy() + random.uniform(-S.mutation_size, S.mutation_size)
+                        # No mutation happens
+                        else:
+                            child.brain.layers[i].weights[j][k] = parent2.brain.layers[i].weights[j][k].copy()
+            
+            # Inheriting the Layer Biases
+            for j in range(len(child.brain.layers[i].biases)):
+                for k in range(len(child.brain.layers[i].biases[j])):
+                    # Parent 1 gene inheretance
+                    if random.random() > 0.5:
+                        # Random mutation happens
+                        if random.random() < S.mutation_chance:
+                            child.brain.layers[i].biases[j][k] = parent1.brain.layers[i].biases[j][k].copy() + random.uniform(-S.mutation_size, S.mutation_size)
+                        # No mutation happens
+                        else:
+                            child.brain.layers[i].biases[j][k] = parent1.brain.layers[i].biases[j][k].copy()
+                    # Parent 2 gene inheretance
+                    else:
+                        # Random mutation happens
+                        if random.random() < S.mutation_chance:
+                            child.brain.layers[i].biases[j][k] = parent2.brain.layers[i].biases[j][k].copy() + random.uniform(-S.mutation_size, S.mutation_size)
+                        # No mutation happens
+                        else:
+                            child.brain.layers[i].biases[j][k] = parent2.brain.layers[i].biases[j][k].copy()
+
         children.append(child)
 
     # Creating the children that are random
-    for i in range(int(amount_of_children * S.random_percentage)):
-        children.append(Car.Car(S.start_position, S.laser_lines, S.start_direction))
+    for i in range(int(amount_of_children * S.RANDOM_PERCENTAGE)):
+        children.append(Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy()))
 
 
     return children
