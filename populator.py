@@ -11,13 +11,13 @@ import Setting as S
 # start_direction: tuple start direction
 # amount_of_agents: int amount of agents to create
 # sensory_lines: int amount of sensory lines
-def initial_population(map, Genes = None):
+def initial_population(map, start_position, start_direction, Genes = None):
     agents = []
     # If there is a genepool to intialize the population with
     if Genes:
         for i, gene in enumerate(Genes):
             # Creating a instance of a car
-            agent = Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy())
+            agent = Car.Car(start_position, S.laser_lines, start_direction, map.checkpoints.copy())
             # Changing the brain of the agent to the Genes values
             for i in range(len(agent.brain.layers)):
                 # Inheriting the Layer Weights
@@ -35,12 +35,12 @@ def initial_population(map, Genes = None):
     # Create random agents based on no genes.
     else:
         for i in range(S.amount_of_agents):
-            agents.append(Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy()))
+            agents.append(Car.Car(start_position, S.laser_lines, start_direction, map.checkpoints.copy()))
         return agents
     
 
 
-def procreation(agents, map, amount_of_children = S.amount_of_agents):
+def procreation(agents, map, start_position, start_direction, amount_of_children = S.amount_of_agents):
     # Sort the agents by fitness
     agents = sorted(agents, key=attrgetter('fitness'), reverse=True)
 
@@ -52,7 +52,7 @@ def procreation(agents, map, amount_of_children = S.amount_of_agents):
 
     # Creating the copys of the best performing agents in that generation
     for agent in agents:
-        child = Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy())
+        child = Car.Car(start_position, S.laser_lines, start_direction, map.checkpoints.copy())
         child.brain = agent.brain
         children.append(child)
 
@@ -62,7 +62,7 @@ def procreation(agents, map, amount_of_children = S.amount_of_agents):
         parent1 = random.choice(agents)
         parent2 = random.choice(agents)
         # Create a child
-        child = Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy())
+        child = Car.Car(start_position, S.laser_lines, start_direction, map.checkpoints.copy())
         # Crossover
         for i in range(len(child.brain.layers)):
             # Inheriting the Layer Weights
@@ -109,8 +109,7 @@ def procreation(agents, map, amount_of_children = S.amount_of_agents):
 
     # Creating the children that are random
     for i in range(int(amount_of_children * S.RANDOM_PERCENTAGE)):
-        children.append(Car.Car(S.start_position, S.laser_lines, S.start_direction, map.checkpoints.copy()))
+        children.append(Car.Car(start_position, S.laser_lines, start_direction, map.checkpoints.copy()))
 
 
     return children
-

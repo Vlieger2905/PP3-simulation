@@ -32,19 +32,13 @@ agents_per_core = 100
 # minimum amount of agents alive to use multiprocessing
 agents_multi_cutoff = 300
 # Amount of steps the simulation will run
-simulation_length =  50
+simulation_length =  80
 # Starting position normal
-x_coord = 37
-y_coord = 200
+x_coord = [37 * grid_size, 113 * grid_size]
+y_coord = [200 * grid_size, 236 * grid_size]
 
-# second starting location
-# x_coord = 113
-# y_coord = 236
-
-# Starting location within simulation
-start_position = (x_coord*grid_size, y_coord*grid_size)
 # Starting direction
-start_direction = (1, 0)
+start_direction = [(1, 0), (0,1)]
 
 # Hidden layers
 hidden_layers = 128, 64, 32  # Example of increasing the size and adding an extra layer
@@ -72,7 +66,7 @@ checkpoints = [((97, 191), (97, 207)),
                ((162, 257), (162, 279)),
                ((188, 262), (188, 282)), 
                ((231, 276), (225, 255))]
-dead_points = [((128* grid_size, 181* grid_size), (128* grid_size, 207* grid_size)),
+dead_points = [((88* grid_size, 181* grid_size), (128* grid_size, 207* grid_size)),
                ((125* grid_size, 281* grid_size), (102* grid_size, 260* grid_size))
                ]
 

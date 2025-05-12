@@ -5,8 +5,8 @@ import Setting
 
 
 class Map:
-    def __init__(self):
-        self.grid = pandas.read_csv(Setting.map_file)
+    def __init__(self, map_file):
+        self.grid = pandas.read_csv(map_file)
         self.grid = self.grid.to_numpy()
         print(self.grid.shape)
         self.grid = np.transpose(self.grid)

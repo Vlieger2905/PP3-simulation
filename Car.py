@@ -11,8 +11,8 @@ class Car():
         self.spawn = spawn
         self.colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         # Location of the car is the center of the car.
-        self.position = (spawn[0] + random.randint(-2, 2), spawn[1] + random.randint(-2,2))
-        self.direction = pygame.Vector2(direction) + pygame.Vector2(random.uniform(-0.1, 0), random.uniform(-0.1, 0))
+        self.position = spawn
+        self.direction = pygame.Vector2(direction)
         self.direction = self.direction.normalize()
         self.speed = 18
         self.rotation = self.direction

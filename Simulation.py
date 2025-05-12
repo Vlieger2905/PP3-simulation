@@ -1,34 +1,34 @@
-import pygame
+import pygame, random, os, json
 import sys
-import numpy as np
-import cupy as cp
 import time, datetime
 from operator import attrgetter
 import Car, Map
-import multiprocessing
 import multiprocessing_test as mt
 import populator as pop
 import Setting as S
-import os, json
+
 
 class Simulation:
     def __init__(self, Genes = None):
         #Setting up the game class 
         self.screen = pygame.display.set_mode((S.WIDTH, S.HEIGTH))
-        self.start_position = S.start_position
         # Setting up the fps control system of the game
         self.clock =  pygame.time.Clock()
         # Map to train the cars on
-        self.map = Map.Map()
+        self.map = Map.Map(S.map_file)
+        # Picking starting location and direction
+        self.index = 0
+        self.start_position = (S.x_coord[self.index], S.y_coord[self.index])
+        self.start_direction = S.start_direction[self.index]
         self.old_offset = (0,0)
         # Items for the management of the population
         self.agent_sensory_lines = S.laser_lines
         if Genes:   
             Genes = self.Load(Genes)
-            self.agents = pop.initial_population(self.map, Genes)
+            self.agents = pop.initial_population(self.map,self.start_position,self.start_direction, Genes)
 
         else:
-            self.agents = pop.initial_population(self.map)
+            self.agents = pop.initial_population(self.map,self.start_position,self.start_direction)
             self.generation = 1
             
             # Lists to track the growth of the agents.
@@ -36,7 +36,6 @@ class Simulation:
             self.average_fitness = []
 
         self.died_agents = []
-
         
 
     def Run(self):
@@ -89,6 +88,7 @@ class Simulation:
 
             # updating the screen
             pygame.display.update()
+            steps += 1
             self.clock.tick()
 
             # If the simulation has run for the amount of steps or all agents are dead a new population gets made
@@ -106,12 +106,23 @@ class Simulation:
                     self.Save(self.agents)
 
                 # Creating a new population based on the previous population
-                self.agents = pop.procreation(self.agents,self.map)
+                # Picking starting location and direction
+                self.index += 1
+                if self.index > len(S.start_direction)-1:
+                    self.index = 0
+                self.start_position = (S.x_coord[self.index] + random.randint(0,30), S.y_coord[self.index] + random.randint(0,30))
+                self.start_direction = (
+                    S.start_direction[self.index][0] + random.uniform(-0.3, 0.3),
+                    S.start_direction[self.index][1] + random.uniform(-0.3, 0.3)
+                )
+                # Creating new population
+                self.agents = pop.procreation(self.agents,self.map,self.start_position,self.start_direction)
                 # Resetting the died agents and the steps
                 self.died_agents = []
                 steps = 0
                 self.generation += 1
                 print("Generation: ", self.generation)
+            
             
             
     
