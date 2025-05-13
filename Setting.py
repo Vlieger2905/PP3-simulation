@@ -32,7 +32,7 @@ agents_per_core = 100
 # minimum amount of agents alive to use multiprocessing
 agents_multi_cutoff = 300
 # Amount of steps the simulation will run
-simulation_length =  80
+simulation_length =  200
 
 # Hidden layers
 hidden_layers = 32, 32  # Example of increasing the size and adding an extra layer
@@ -60,9 +60,10 @@ checkpoints = [((97, 191), (97, 207)),
                ((162, 257), (162, 279)),
                ((188, 262), (188, 282)), 
                ((231, 276), (225, 255))]
-dead_points = [((88* grid_size, 181* grid_size), (128* grid_size, 207* grid_size)),
-               ((125* grid_size, 281* grid_size), (102* grid_size, 260* grid_size))
-               ]
+# dead_points = [((88* grid_size, 181* grid_size), (128* grid_size, 207* grid_size)),
+#                ((125* grid_size, 281* grid_size), (102* grid_size, 260* grid_size))
+#                ]
+dead_points = []
 
 class NumpyArrayEncoder(json.JSONEncoder):
     def default(self, obj):

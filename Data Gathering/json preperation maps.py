@@ -3,17 +3,17 @@ import json
 import numpy
 
 
-map_file = "Data Gathering\Mapdata\Test Straight.csv"
+map_file = "Data Gathering\Mapdata\grid_output_10 limited boundaries.csv"
 grid = pandas.read_csv(map_file)
 grid = grid.to_numpy()
 
 
-output_file = "Maps/Test map straigth.json"
+output_file = "Maps/Test map limited bound DB .json"
 
 data = {
-    "starting position": [3, 3],
+    "starting position": [39, 200],
     "starting direction": [1, 0],
-    "checkpoints" : [[[100,1],[100,14]]],
+    "checkpoints": [],
     "grid": grid.tolist()
 }
 

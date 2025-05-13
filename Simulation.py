@@ -15,7 +15,7 @@ class Simulation:
         # Setting up the fps control system of the game
         self.clock =  pygame.time.Clock()
         # Map to train the cars on
-        self.map = Map.Map("Maps\Test map straigth.json")
+        self.map = Map.Map("Maps\Test map limited bound DB .json")
         # Picking starting location and direction
         self.index = 0
         self.start_position = (self.map.start_pos[0] * S.grid_size, self.map.start_pos[1] * S.grid_size)

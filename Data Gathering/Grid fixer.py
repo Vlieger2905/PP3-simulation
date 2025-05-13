@@ -45,9 +45,9 @@ def draw_grid(screen, grid,offset_x, offset_y):
             pygame.draw.rect(screen, GRID_COLOR, (x * CUBE_SIZE, y * CUBE_SIZE, CUBE_SIZE, CUBE_SIZE), 1)
 
 
-csv_file = "Data Gathering\Mapdata\Test Straight.csv"
+csv_file = None
 # Main function
-def main(csv_file = None, x= 100, y = 100):
+def main(csv_file = None, x= 300, y = 300):
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Grid Editor")
