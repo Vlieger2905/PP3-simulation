@@ -11,4 +11,4 @@ def main(Genes = None):
 
 
 if __name__ == '__main__':
-    main("Save Files\Generation 90 at 13-05_12-49.json")
+    main("Save Files\Generation 250 at 13-05_13-31.json")
