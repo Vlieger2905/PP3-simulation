@@ -1,17 +1,19 @@
 import math, pandas
 import numpy as np
-import pygame
+import pygame, json
 import Setting
 
 
 class Map:
     def __init__(self, map_file):
-        self.grid = pandas.read_csv(map_file)
-        self.grid = self.grid.to_numpy()
-        print(self.grid.shape)
+        with open(map_file, "r") as json_file:
+            json_data = json.load(json_file)
+        self.grid = np.array(json_data["grid"])  # Read the rest of the grid starting from the third line without inferring headers
         self.grid = np.transpose(self.grid)
+        self.start_pos = json_data["starting position"]
+        self.start_direction = json_data["starting direction"]
         self.rects = self.create_rect()
-        self.checkpoints = self.create_checkpoints()
+        self.checkpoints = self.create_checkpoints(json_data["checkpoints"])
 
     # Creating the rects to collide the lasers and cars with 
     def create_rect(self):
@@ -25,10 +27,7 @@ class Map:
                 j += 1
             i += 1
             j = 0
-        # Merge the rects to reduce the amount of rects to collide with 
-        print(f"Created {len(collision_rects)} collision rects.")
         collision_rects = self.merge_rects(collision_rects)
-        print(f"Merged into {len(collision_rects)} collision rects.")
         return collision_rects
     
     def merge_rects(self, rects):
@@ -68,9 +67,9 @@ class Map:
         
         return final_merged
 
-    def create_checkpoints(self):
+    def create_checkpoints(self,data):
         checkpoints = []
-        for checkpoint in Setting.checkpoints:
+        for checkpoint in data:
             start = checkpoint[0]
             end = checkpoint[1]
             start = (start[0] * Setting.grid_size, start[1] * Setting.grid_size)

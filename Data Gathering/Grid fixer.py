@@ -1,5 +1,6 @@
 import pygame
 import csv
+import time
 
 # Constants
 WINDOW_WIDTH = 800
@@ -22,7 +23,6 @@ def load_csv(file_path):
                 if cell == '2':
                     checkpoints.append((len(grid), len(line) - 1))  # Store checkpoint position
             grid.append(line)
-    print(checkpoints)
     return grid
 
 # Save grid back to CSV
@@ -45,17 +45,20 @@ def draw_grid(screen, grid,offset_x, offset_y):
             pygame.draw.rect(screen, GRID_COLOR, (x * CUBE_SIZE, y * CUBE_SIZE, CUBE_SIZE, CUBE_SIZE), 1)
 
 
-
+csv_file = "Data Gathering\Mapdata\Test Straight.csv"
 # Main function
-def main():
+def main(csv_file = None, x= 100, y = 100):
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Grid Editor")
-    clock = pygame.time.Clock()
 
     # Load initial grid from CSV
-    csv_file = "Data Gathering\grid_output_10.csv"
-    grid = load_csv(csv_file)
+    if csv_file:
+        grid = load_csv(csv_file)
+    else:
+        # Create a new grid of specified dimensions
+        grid = [[0 for _ in range(x)] for _ in range(y)]
+        csv_file = f"{time.time()}.csv"
 
     running = True
     # Add WASD movement functionality
@@ -130,4 +133,4 @@ def main():
 
         pygame.display.flip()
 if __name__ == "__main__":
-    main()
+    main(csv_file)

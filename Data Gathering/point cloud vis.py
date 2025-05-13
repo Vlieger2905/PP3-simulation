@@ -20,4 +20,4 @@ def plot_xy_from_xyz(file_path):
     plt.axis('equal')
     plt.show()
 
-plot_xy_from_xyz("Data Gathering/final_map.txt")
+plot_xy_from_xyz("Data Gathering\grid_output_10 copy.csv")

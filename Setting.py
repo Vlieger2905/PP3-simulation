@@ -33,15 +33,9 @@ agents_per_core = 100
 agents_multi_cutoff = 300
 # Amount of steps the simulation will run
 simulation_length =  80
-# Starting position normal
-x_coord = [37 * grid_size, 113 * grid_size]
-y_coord = [200 * grid_size, 236 * grid_size]
-
-# Starting direction
-start_direction = [(1, 0), (0,1)]
 
 # Hidden layers
-hidden_layers = 128, 64, 32  # Example of increasing the size and adding an extra layer
+hidden_layers = 32, 32  # Example of increasing the size and adding an extra layer
 
 # Amount of agents procreated in the following precentages
 COPY_PERCENTAGE = 0.1
@@ -56,7 +50,7 @@ STAYIN_ALIVE_REWARD = 1
 CHECKPOINT_REWARD = 300
 
 # Map file
-map_file = "Data Gathering\grid_output_10.csv"
+map_file = "Maps\Test map of DB.json"
 checkpoints = [((97, 191), (97, 207)), 
                ((105, 205), (118, 205)), 
                ((105, 254), (118, 254)), 

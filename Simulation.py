@@ -15,11 +15,11 @@ class Simulation:
         # Setting up the fps control system of the game
         self.clock =  pygame.time.Clock()
         # Map to train the cars on
-        self.map = Map.Map(S.map_file)
+        self.map = Map.Map("Maps\Test map straigth.json")
         # Picking starting location and direction
         self.index = 0
-        self.start_position = (S.x_coord[self.index], S.y_coord[self.index])
-        self.start_direction = S.start_direction[self.index]
+        self.start_position = (self.map.start_pos[0] * S.grid_size, self.map.start_pos[1] * S.grid_size)
+        self.start_direction = self.map.start_direction
         self.old_offset = (0,0)
         # Items for the management of the population
         self.agent_sensory_lines = S.laser_lines
@@ -107,13 +107,10 @@ class Simulation:
 
                 # Creating a new population based on the previous population
                 # Picking starting location and direction
-                self.index += 1
-                if self.index > len(S.start_direction)-1:
-                    self.index = 0
-                self.start_position = (S.x_coord[self.index] + random.randint(0,30), S.y_coord[self.index] + random.randint(0,30))
+                self.start_position = (int((self.map.start_pos[0] + random.uniform(-3,3)) * S.grid_size) , int((self.map.start_pos[1] + random.uniform(-3,3))*S.grid_size)) 
                 self.start_direction = (
-                    S.start_direction[self.index][0] + random.uniform(-0.3, 0.3),
-                    S.start_direction[self.index][1] + random.uniform(-0.3, 0.3)
+                    self.map.start_direction[0] + random.uniform(-0.3, 0.3),
+                    self.map.start_direction[1] + random.uniform(-0.3, 0.3)
                 )
                 # Creating new population
                 self.agents = pop.procreation(self.agents,self.map,self.start_position,self.start_direction)
