@@ -15,7 +15,7 @@ class Brain:
         # Options to controll the car
         self.output_options= ["full_left", "left", "center", "right", "full_right"]
         self.outputSize = len(self.output_options)
-        self.neuronLayer = [self.inputSize] + [layer for layer in S.hidden_layers] + [self.outputSize]
+        self.neuronLayer = [self.inputSize] + [layer for layer in S.hidden_layers] + [self.outputSize] 
         # Creating the hidden layers:
         # When there are inherited genes
         if Genes:
@@ -43,6 +43,7 @@ class Brain:
             new_layer = Layer(neuronsLayer[index], neuronsLayer[index+1])
             for gene in layer:
                 weights = cp.array(gene["weights"])
+                print(index, weights.__len__())
                 biases = cp.array(gene["biases"])
                 new_layer.weights = weights
                 new_layer.biases = biases

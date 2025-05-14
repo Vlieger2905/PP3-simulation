@@ -24,7 +24,7 @@ lidar_max_dist = 1200
 # Map settings
 grid_size = 10
 # Amount of agents in the simulation
-amount_of_agents = 100
+amount_of_agents = 1
 # maximum Amount of cores to be used with multiprocessing
 max_cores = 10
 # minumum amount of agents per core
@@ -50,7 +50,7 @@ STAYIN_ALIVE_REWARD = 1
 CHECKPOINT_REWARD = 300
 
 # Map file
-map_file = "Maps\Test map of DB.json"
+map_file = "Maps\Map of DB.json"
 checkpoints = [((97, 191), (97, 207)), 
                ((105, 205), (118, 205)), 
                ((105, 254), (118, 254)), 
