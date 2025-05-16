@@ -45,7 +45,7 @@ def draw_grid(screen, grid,offset_x, offset_y):
             pygame.draw.rect(screen, GRID_COLOR, (x * CUBE_SIZE, y * CUBE_SIZE, CUBE_SIZE, CUBE_SIZE), 1)
 
 
-csv_file = "Data Gathering\Mapdata\Test Straight.csv"
+csv_file = "Data Gathering\Mapdata\map DB limited bounds 3 of 4 .csv"
 # Main function
 def main(csv_file = None, x= 300, y = 300):
     pygame.init()
@@ -62,7 +62,7 @@ def main(csv_file = None, x= 300, y = 300):
 
     running = True
     # Add WASD movement functionality
-    offset_x, offset_y = 0,0  # Initialize offsets for grid movement
+    offset_x, offset_y = 100,100  # Initialize offsets for grid movement
     move_speed = 10  # Speed of movement
 
     is_dragging = False  # Track if the mouse is being dragged
@@ -117,8 +117,7 @@ def main(csv_file = None, x= 300, y = 300):
                     grid_y = (y - offset_y) // CUBE_SIZE
 
                     # Ensure grid position is within bounds
-                    if 0 <= grid_y < len(grid) and 0 <= grid_x < len(grid[0]):
-                        grid[grid_y][grid_x] = 2
+                    print(f"x:{grid_x},y:{grid_y}")
 
         # Handle key presses for movement
         keys = pygame.key.get_pressed()

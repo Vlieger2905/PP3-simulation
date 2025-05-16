@@ -95,9 +95,9 @@ class Simulation:
             if steps >= S.simulation_length or self.agents.__len__() == 0:
                 # Adding all the died agents to the agents list
                 self.agents.extend(self.died_agents)
-
-
+                
                 agents = sorted(self.agents, key=attrgetter('fitness'), reverse=True)
+                print(f"agents len: {agents.__len__()}")
                 self.top_fitness.append(agents[0].fitness)
                 self.average_fitness.append(sum(agent.fitness for agent in agents[:10]) / 10)
 

@@ -3,13 +3,14 @@ import json
 import numpy
 
 
-map_file = "Data Gathering\Mapdata\Map of DB.csv"
+map_file = "Data Gathering\Mapdata\map DB limited bounds 3 of 4 .csv"
 grid = pandas.read_csv(map_file)
 grid = grid.to_numpy()
 
 
-output_file = "Maps/Map of DB.json"
+output_file = "Maps\Test map limited bound DB 3 of 4 .json"
 
+# Format for checkpoints is [x,y]
 data = {
     "starting position": [39, 200],
     "starting direction": [1, 0],
@@ -102,10 +103,81 @@ data = {
                 225,
                 255
             ]
-        ]],
+        ],
+        [
+            [
+                257,
+                244
+            ],
+            [
+                273,
+                259
+            ]
+        ],
+        [
+            [
+                321,
+                210 
+            ],
+            [
+                325,
+                240
+            ]
+        ],
+        [
+            [
+                321,
+                175
+            ],
+            [
+                353,
+                164
+            ]
+        ],
+        [
+            [
+                275,
+                131
+            ],
+            [
+                277,
+                164
+            ]
+        ],
+        [
+            [
+                251,
+                180
+            ],
+            [
+                200,
+                178
+            ]
+        ],
+        [
+            [
+                192,
+                183
+            ],
+            [
+                194,
+                209
+            ]
+        ],
+        [
+            [
+                128,
+                183
+            ],
+            [
+                130,
+                203
+            ]
+        ]
+        ],
     "grid": grid.tolist()
 }
-
+print(data["checkpoints"].__len__())
 with open(output_file, "w") as json_file:
     json.dump(data, json_file, indent=4)
 
