@@ -97,12 +97,11 @@ class Simulation:
                 self.agents.extend(self.died_agents)
                 
                 agents = sorted(self.agents, key=attrgetter('fitness'), reverse=True)
-                print(f"agents len: {agents.__len__()}")
                 self.top_fitness.append(agents[0].fitness)
                 self.average_fitness.append(sum(agent.fitness for agent in agents[:10]) / 10)
 
                 # Saving the neural network information every 10 generations. 
-                if self.generation % 10 == 0:
+                if self.generation % S.save_file_per_gen == 0:
                     self.Save(self.agents)
 
                 # Creating a new population based on the previous population
@@ -117,9 +116,7 @@ class Simulation:
                 # Resetting the died agents and the steps
                 self.died_agents = []
                 steps = 0
-                self.generation += 1
-                print("Generation: ", self.generation)
-            
+                self.generation += 1          
             
             
     

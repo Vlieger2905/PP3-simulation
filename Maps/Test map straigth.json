@@ -1,7 +1,7 @@
 {
     "starting position": [
-        13,
-        41
+        7,
+        7
     ],
     "starting direction": [
         1,
@@ -10,12 +10,12 @@
     "checkpoints": [
         [
             [
-                53,
-                32
+                68,
+                9
             ],
             [
-                71,
-                32
+                81,
+                6
             ]
         ]
     ],

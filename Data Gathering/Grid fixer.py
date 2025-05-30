@@ -45,7 +45,7 @@ def draw_grid(screen, grid,offset_x, offset_y):
             pygame.draw.rect(screen, GRID_COLOR, (x * CUBE_SIZE, y * CUBE_SIZE, CUBE_SIZE, CUBE_SIZE), 1)
 
 
-csv_file = "Data Gathering\Mapdata\map DB limited bounds 3 of 4 .csv"
+csv_file = "Data Gathering\Mapdata\map DB limited bounds 4 of 5.csv"
 # Main function
 def main(csv_file = None, x= 300, y = 300):
     pygame.init()

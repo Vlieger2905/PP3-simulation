@@ -3,12 +3,12 @@ import json
 import numpy
 
 
-map_file = "Data Gathering\Mapdata\map DB limited bounds 3 of 4 .csv"
+map_file = "Data Gathering\Mapdata\map DB limited bounds 4 of 5.csv"
 grid = pandas.read_csv(map_file)
 grid = grid.to_numpy()
 
 
-output_file = "Maps\Test map limited bound DB 3 of 4 .json"
+output_file = "Maps\Test map limited bound DB 4 of 5 .json"
 
 # Format for checkpoints is [x,y]
 data = {
@@ -172,6 +172,67 @@ data = {
             [
                 130,
                 203
+            ]
+        ],
+        [
+            [
+                282,
+                226
+            ],
+            [
+                290,
+                259
+            ]
+        ]
+        ,
+        [
+            [
+                322,
+                240
+            ],
+            [
+                322,
+                210
+            ]
+        ],
+        [
+            [
+                323,
+                209
+            ],
+            [
+                387,
+                205
+            ]
+        ],
+        [
+            [
+                321,
+                176
+            ],
+            [
+                352,
+                162
+            ]
+        ],
+        [
+            [
+                277,
+                131
+            ],
+            [
+                277,
+                164
+            ]
+        ],
+        [
+            [
+                194,
+                209
+            ],
+            [
+                192,
+                183
             ]
         ]
         ],

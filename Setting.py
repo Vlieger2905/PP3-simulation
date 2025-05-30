@@ -16,7 +16,7 @@ car_wheelbase = 0.257 # in m
 max_steering_angle = 60 # in degrees
 
 # Information lidar
-laser_lines = 64
+laser_lines = 32
 lidar_min_dist = 20
 lidar_max_dist = 1200
 
@@ -32,7 +32,9 @@ agents_per_core = 100
 # minimum amount of agents alive to use multiprocessing
 agents_multi_cutoff = 300
 # Amount of steps the simulation will run
-simulation_length =  200
+simulation_length =  400
+save_file_per_gen = 50
+
 
 # Hidden layers
 hidden_layers = 32, 32  # Example of increasing the size and adding an extra layer
@@ -50,7 +52,7 @@ STAYIN_ALIVE_REWARD = 1
 CHECKPOINT_REWARD = 300
 
 # Map file
-map_file = "Maps\Test map of DB.json"
+map_file = "Maps\Test map limited bound DB 4 of 5 .json"
 checkpoints = [((97, 191), (97, 207)), 
                ((105, 205), (118, 205)), 
                ((105, 254), (118, 254)), 
@@ -60,10 +62,11 @@ checkpoints = [((97, 191), (97, 207)),
                ((162, 257), (162, 279)),
                ((188, 262), (188, 282)), 
                ((231, 276), (225, 255))]
-# dead_points = [((88* grid_size, 181* grid_size), (128* grid_size, 207* grid_size)),
-#                ((125* grid_size, 281* grid_size), (102* grid_size, 260* grid_size))
-#                ]
-dead_points = []
+dead_points = [((127* grid_size, 184* grid_size), (127* grid_size, 207* grid_size)),
+               ((281* grid_size, 226* grid_size), (225* grid_size, 247* grid_size)),
+               ((325* grid_size, 240* grid_size), (387* grid_size, 206* grid_size))
+               ]
+
 
 class NumpyArrayEncoder(json.JSONEncoder):
     def default(self, obj):
